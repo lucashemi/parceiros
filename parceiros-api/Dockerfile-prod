@@ -1,0 +1,26 @@
+# Use uma imagem base do Node.js 20.11
+FROM node:20.11
+
+RUN npm install -g npm@latest
+
+# Defina o diretório de trabalho no contêiner
+WORKDIR /usr/src/app
+
+# Copie o arquivo package.json e package-lock.json (se existir)
+COPY package.json ./
+
+# Instale as dependências do projeto
+RUN npm install
+
+# Copie o restante do código-fonte para o diretório de trabalho no contêiner
+COPY . .
+
+# Compile o TypeScript, se aplicável
+RUN npm install -g typescript && \
+    tsc
+
+# Exponha a porta em que o seu aplicativo está sendo executado
+EXPOSE 3004
+
+# Comando para iniciar a sua aplicação
+CMD ["npm", "run", "start"]
